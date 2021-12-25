@@ -24,9 +24,8 @@ from PyQt5 import QtGui, QtCore
 def getValue(line, key, default=None):
     if key not in line:
         return default
-    else:
-        subPart = line[line.find(key) + len(key):]
-        m = re.search('^-?[0-9]+\\.?[0-9]*', subPart)
+    subPart = line[line.find(key) + len(key):]
+    m = re.search('^-?[0-9]+\\.?[0-9]*', subPart)
     try:
         return float(m.group(0))
     except:
@@ -87,11 +86,11 @@ class GXWriter(MeshWriter):
                 gx.print_time = int(getValue(line, ';TIME:', 0))
             if line.startswith(';Filament used:'):
                 f = float(line.split(':')[1].split('m')[0].strip())
-                f = f*100
+                f *= 100
                 gx.filament_usage = int(f)
             if line.startswith(';Layer height:'):
                 f = float(getValue(line, ';Layer height:', 0))
-                f = f*1000
+                f *= 1000
                 gx.layer_height = int(f)
         Logger.log("i", "Updated values from struct =>", vars(gx))
 

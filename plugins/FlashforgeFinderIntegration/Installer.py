@@ -66,7 +66,7 @@ class Installer(Extension):
 
         # Copy all missing files from src to dst
         restart_required = False
-        for f in resource_map.keys():
+        for f in resource_map:
             src_dir, dst_dir = resource_map[f]["src"], resource_map[f]["dst"]
             src = os.path.join(src_dir, f)
             dst = os.path.join(dst_dir, f)
@@ -76,9 +76,7 @@ class Installer(Extension):
                     try:
                         os.makedirs(dst_dir)
                     except OSError as e:
-                        if e.errno == errno.EEXIST and os.path.isdir(dst_dir):
-                            pass
-                        else:
+                        if e.errno != errno.EEXIST or not os.path.isdir(dst_dir):
                             raise
                 shutil.copy2(src, dst, follow_symlinks=False)
                 restart_required = True
